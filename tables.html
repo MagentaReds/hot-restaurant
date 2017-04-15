@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <title>GJSJ - Table Listing</title>
+</head>
+
+<body>
+    <div class="container">
+        <div class="jumbotron">
+            <header>
+                <h1>GJSJ</h1>
+                <h2>Making your wait list ... a little better</h2>
+                <a class="btn" href="/reserve">Make a Reservation</a>
+            </header>
+        </div>
+        <section class="main container">
+            <article class="seated">
+                <h3>Currently Seated</h3>
+                <ul class="seated-list">
+                </ul>
+            </article>
+            <article class="waiting">
+                <h3>On the waitlist</h3>
+                <ul class="wait-list">
+                </ul>
+            </article>
+        </section>
+        <footer>
+            <ul>
+                <li><a href="api/tables">API Table Link</a></li>
+                <li><a href="api/waitlist">API Waitlist</a></li>
+        </footer>
+        <script>
+            var currentUrl = window.location.origin;
+            //not on wait --> max 5
+            function displayList(table, res) {
+                var table = table;
+                for (i = 0; i < res.length; i++) {
+                    console.log(res[i]);
+                    var li = $('<li>');
+                    var pos = $('<span class="pos">' + i + '</span>');
+                    var name = $('<span class="name">' + res[i].name + '</span>');
+                    var email = $('<span class="name">' + res[i].email + '</span>');
+                    var phone = $('<span class="name">' + res[i].phone + '</span>');
+                    $(li).append(pos, name, email, phone);
+                    $(table).append(li);
+                }
+            }
+            $.get(currentUrl + '/api/tables').done(function(res, data) {
+                console.log(res);
+                var seated = $('ul.seated-list');
+                console.log(seated);
+                displayList(seated, res);
+            });
+
+            $.get(currentUrl + '/api/waitlist').done(function(res, data) {
+                console.log(res);
+                var waitlist = $('ul.wait-list');
+                displayList(waitlist, res);
+            });
+        </script>
+    </div>
+</body>
+
+</html>
